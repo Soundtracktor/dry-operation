@@ -13,6 +13,12 @@ With the following operations:
 `UserMailer.sign_up_mail(user_id).perform_later` //sends sign up mail to user in bg task
 
 
+We want to validate
+- user email is present and unique
+- password is present and over 8 chars long
+- organization name is present and unique
+- source_token is present
+
 We want to use *SOLID* principles
 
 *S*ingle responsibility principle[6]
@@ -29,3 +35,5 @@ We want to use *SOLID* principles
 
 *D*ependency inversion principle[10]
   one should "depend upon abstractions, [not] concretions."[4]
+
+
