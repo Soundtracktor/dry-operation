@@ -5,9 +5,13 @@ module OrganizationMemberships
     end
 
     def call(input)
-      Success(
-        ::OrganizationMembership.create!(input)
-      )
+      if rand(3) == 1
+        Failure("Something happened")
+      else
+        Success(
+          ::OrganizationMembership.create!(input)
+        )
+      end
     end
   end
 end

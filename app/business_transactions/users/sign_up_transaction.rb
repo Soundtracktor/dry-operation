@@ -1,10 +1,10 @@
 module Users
   class SignUpTransaction < BaseTransaction
     step :validate
-    step :create_user
-    step :create_organization
-    step :add_user_as_owner_to_organization
-    step :create_subscription
+    step :create_user, with: "operations.users.create"
+    step :create_organization, with: "operations.organizations.create"
+    step :add_user_as_owner_to_organization, with: "operations.organization_memberships.create"
+    step :create_subscription, with: "operations.subscriptions.create"
     step :send_welcome_mail
 
     private
@@ -17,33 +17,35 @@ module Users
     end
 
     def create_user(input)
-      @user = Users::CreateOperation.new.call(input).value!
+      operation = super(input)
+
+      return operation if operation.failure?
+      
+      @user = operation.value!
       
       Success(input)
     end
 
     def create_organization(input)
-      @organization = Organizations::CreateOperation.new.call(
-        name: input[:organization_name]
-      ).value!
+      operation = super(name: input[:organization_name])
+
+      return operation if operation.failure?
+      
+      @organization = operation.value!
       
       Success(input)
     end
 
     def add_user_as_owner_to_organization(input)
-      OrganizationMemberships::CreateOperation.new.call(
+      super(
         user: user,
         organization: organization,
         role: 'owner'
-      ).value!
-      
-      Success(input)
+      )
     end
 
     def create_subscription(input)
-      Subscriptions::CreateOperation.new(user.id).call(input)
-
-      Success(input)
+      super(user.id, input)
     end
 
     def send_welcome_mail(input)
