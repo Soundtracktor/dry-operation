@@ -12,7 +12,8 @@ module Users
     attr_reader :user, :organization
 
     def validate(input)
-      Success(input)
+      schema = Users::SignUpTransactionSchema.call(input)
+      schema.success? ? Success(schema) : Failure(schema.errors)
     end
 
     def create_user(input)

@@ -12,7 +12,9 @@ module Mutations
 
       def resolve(args)
         transaction = ::Users::SignUpTransaction.new.call(args)
-        transaction.value!
+        return transaction.value! if transaction.success?
+
+        GraphQL::ExecutionError.new transaction.failure
       end
     end
   end

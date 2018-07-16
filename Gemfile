@@ -11,6 +11,7 @@ gem 'graphql'
 gem 'graphiql-rails'
 gem 'bcrypt', '~> 3.1.7'
 gem 'dry-transaction'
+gem 'dry-validation'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
