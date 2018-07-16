@@ -16,31 +16,29 @@ module Users
     end
 
     def create_user(input)
-      @user = ::User.create!(
-        email: input[:email],
-        name: input[:name],
-        password: input[:password],
-        password_confirmation: input[:password],
-      )
+      @user = Users::CreateOperation.new.call(input).value!
       
       Success(input)
     end
 
     def create_organization(input)
-      @organization = ::Organization.create!(name: input[:organization_name])
+      @organization = Organizations::CreateOperation.new.call(input).value!
       
       Success(input)
     end
 
     def add_user_as_owner_to_organization(input)
-      ::OrganizationMembership.create!(user: user, organization: organization, role: "owner")
+      OrganizationMemberships::CreateOperation.new.call(
+        user: user,
+        organization: organization,
+        role: 'owner'
+      ).value!
       
       Success(input)
     end
 
     def create_subscription(input)
-      subscription = ::StripeApi::Subscriptions::CreateService.new(source_token: input[:source_token]).call
-      user.update!(subscription_paid_at: Time.current, subscription_uid: subscription.id) if subscription
+      Subscriptions::CreateOperation.new(user.id).call(input)
 
       Success(input)
     end
@@ -48,7 +46,7 @@ module Users
     def send_welcome_mail(input)
       UserMailer.sign_up_email(user.id).deliver
 
-      Success(user)
+      Success(user.reload)
     end
   end
 end
