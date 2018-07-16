@@ -7,7 +7,7 @@ module StripeApi
 
       def call
         if rand(2) == 0
-          return false
+          raise "Payment failed"
         else
           OpenStruct.new(id: SecureRandom.hex(12))
         end
