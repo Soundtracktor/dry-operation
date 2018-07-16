@@ -6,7 +6,7 @@ module Organizations
 
     def call(input)
       Success(
-        ::Organization.create!(name: input[:organization_name])
+        ::Organization.create!(input)
       )
     end
   end

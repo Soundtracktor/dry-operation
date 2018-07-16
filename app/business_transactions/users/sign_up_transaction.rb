@@ -22,7 +22,9 @@ module Users
     end
 
     def create_organization(input)
-      @organization = Organizations::CreateOperation.new.call(input).value!
+      @organization = Organizations::CreateOperation.new.call(
+        name: input[:organization_name]
+      ).value!
       
       Success(input)
     end
