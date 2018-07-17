@@ -37,3 +37,15 @@ We want to use *SOLID* principles
   one should "depend upon abstractions, [not] concretions."[4]
 
 
+Sum Up 
+
+++
+Distinction between business transactions & operations
+Declarative steps
+Success or Failure response / Monads?
+Reusable operation components / container injection/composition
+Type checking / validation
+
+--
+Too much DSL
+[input : output] => [input : output] => mapping is hard
